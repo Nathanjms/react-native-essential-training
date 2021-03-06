@@ -47,14 +47,14 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         justifyContent: 'space-around',
         marginHorizontal: 20,
-        marginTop: 30,
+        marginTop: 170,
 
     },
 
     number: {
         backgroundColor: '#999',
         width: 100,
-        margin: 15,
+        margin: 20,
         textAlign: 'center',
         fontSize: 35,
         borderRadius: 20,
