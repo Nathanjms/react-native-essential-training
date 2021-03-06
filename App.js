@@ -20,13 +20,16 @@ const styles = StyleSheet.create({
     marginTop: 40,
     backgroundColor: 'orange',
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'space-around',
+    // alignItems: 'center',
   },
   title: {
     fontSize: 24,
     fontWeight: '600',
     color: 'blue',
+    backgroundColor: 'grey',
+    flex: 1,
+    margin: 10,
   },
 });
 
