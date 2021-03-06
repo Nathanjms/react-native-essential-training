@@ -2,9 +2,9 @@
 
 ## To set up (wireless) adb for android device
 
-1. Run `adb tcpip 5555`
+1. Run `adb pair {ip-address}:{port}`
 2. Find ip address of phone in settings
-3. Run `adb connect {ip-address}:5555`
+3. Run `adb connect {ip-address}:{port}`
 4. Then do the below
 
 ## To launch app on Android device/Emulator
