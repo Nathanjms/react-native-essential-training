@@ -12,6 +12,7 @@ class App extends React.Component {
     target = this.randomNumbers
         .slice(0, this.props.randomNumberCount - 2)
         .reduce((acc, curr) => acc + curr, 0);
+    //TODO: Shuffle random numbers.
     render() {
         return (
             <View style={styles.container}>
