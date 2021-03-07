@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { StyleSheet, Text, View } from 'react-native';
 
 import RandomNumber from './RandomNumber';
+import shuffle from 'lodash.shuffle';
 
 class App extends React.Component {
     static propTypes = {
@@ -13,13 +14,14 @@ class App extends React.Component {
         selectedNumberIds: [],
         remainingSeconds: this.props.initialSeconds,
     };
+    gameStatus = 'PLAYING';
     randomNumbers = Array
         .from({ length: this.props.randomNumberCount })
         .map(() => 1 + Math.floor(10 * Math.random()));
     target = this.randomNumbers
         .slice(0, this.props.randomNumberCount - 2)
         .reduce((acc, curr) => acc + curr, 0);
-    //TODO: Shuffle random numbers.
+    shuffledRandomNumbers = shuffle(this.randomNumbers);
 
     componentDidMount() {
         this.intervalId = setInterval(() => {
@@ -50,8 +52,22 @@ class App extends React.Component {
     gameStatus = () => {
         const sumSelected = this.state.selectedNumberIds.reduce((acc, curr) => {
             return acc + this.randomNumbers[curr];
+    UNSAFE_componentWillUpdate(nextProps, nextState) {
+        if (
+            nextState.selectedNumberIds !== this.state.selectedNumberIds ||
+            nextState.remainingSeconds === 0
+        ) {
+            this.gameStatus = this.calcGameStatus(nextState);
+            if (this.gameStatus !== 'PLAYING') {
+                clearInterval(this.intervalId);
+            }
+        }
+    }
+    calcGameStatus = (nextState) => {
+        const sumSelected = nextState.selectedNumberIds.reduce((acc, curr) => {
+            return acc + this.shuffledRandomNumbers[curr];
         }, 0);
-        if (this.state.remainingSeconds === 0) {
+        if (nextState.remainingSeconds === 0) {
             return 'LOST';
         }
         if (sumSelected < this.target) {
@@ -65,12 +81,12 @@ class App extends React.Component {
         }
     };
     render() {
-        const gameStatus = this.gameStatus();
+        const gameStatus = this.gameStatus;
         return (
             <View style={styles.container}>
                 <Text style={[styles.target, styles[`STATUS_${gameStatus}`]]}>{this.target}</Text>
                 <View style={styles.numberContainer}>
-                    {this.randomNumbers.map((randomNumber, i) =>
+                    {this.shuffledRandomNumbers.map((randomNumber, i) =>
                         <RandomNumber
                             key={i}
                             id={i}
