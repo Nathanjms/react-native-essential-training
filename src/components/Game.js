@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, Image } from 'react-native';
 
 import RandomNumber from './RandomNumber';
 import shuffle from 'lodash.shuffle';
@@ -10,6 +10,8 @@ class App extends React.Component {
         randomNumberCount: PropTypes.number.isRequired,
         initialSeconds: PropTypes.number.isRequired,
         onPlayAgain: PropTypes.func.isRequired,
+        winStreak: PropTypes.number.isRequired,
+        globalWin: PropTypes.bool.isRequired,
     };
 
     state = {
@@ -87,6 +89,32 @@ class App extends React.Component {
 
     render() {
         const gameStatus = this.gameStatus;
+        let endGameText;
+        if (gameStatus === 'WON') {
+            endGameText = <Text style={{ color: 'white', fontSize: 20, paddingBottom: 15, textAlign: 'center' }}>Won! Your streak: {this.props.winStreak + 1}</Text>;
+        } else {
+            endGameText = <Text style={{ color: 'white', fontSize: 20, paddingBottom: 15, textAlign: 'center' }}>Lost! Your streak: {this.props.winStreak}</Text>;
+        }
+
+        if (this.props.globalWin) {
+            return (
+                <View
+                    style={{
+                        flex: 1,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        backgroundColor: '#282c34'
+                    }}
+                >
+                    <Image source={require('../images/rickoCongrats.png')} style={{
+                        width: 400, height: 300
+                    }
+                    } />
+                    <Button title="Continue?" onPress={() => this.props.onPlayAgain('WON')} />
+                </View >
+            );
+        }
+
         return (
             <View style={styles.container}>
                 <View style={[styles.headerContainer, styles[`STATUS_${gameStatus}`]]}>
@@ -106,12 +134,14 @@ class App extends React.Component {
                 </View>
                 {gameStatus !== 'PLAYING' && (
                     <View>
-                        <Text style={{ color: 'white', fontSize: 35 }}>Streak: 1</Text>
-                        <Button title="Play Again?" onPress={this.props.onPlayAgain} />
+                        {endGameText}
+                        <Button title="Play Again?" onPress={() => this.props.onPlayAgain(gameStatus)} />
                     </View>
-                )}
+                )
+                }
             </View>
         );
+
     }
 }
 const styles = StyleSheet.create({
