@@ -115,18 +115,30 @@ const styles = StyleSheet.create({
         paddingTop: 30,
     },
 
+    headerContainer: {
+        backgroundColor: '#bbb',
+        margin: 30,
+        textAlign: 'center',
+        borderRadius: 20,
+    },
+
+    timer: {
+        fontSize: 20,
+        marginHorizontal: 30,
+        textAlign: 'center',
+        borderRadius: 20
+    },
+
     target: {
         fontSize: 50,
-        backgroundColor: '#bbb',
-        margin: 50,
         textAlign: 'center',
         borderRadius: 20
     },
 
     numberContainer: {
         flex: 1,
-        marginHorizontal: 30,
-        marginTop: 50,
+        marginHorizontal: 20,
+        marginTop: 10,
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'space-around',
@@ -143,6 +155,13 @@ const styles = StyleSheet.create({
 
     STATUS_LOST: {
         backgroundColor: 'red'
+    },
+
+
+
+    button: {
+        marginVertical: 20,
+        color: '#7b26ad'
     }
 });
 
