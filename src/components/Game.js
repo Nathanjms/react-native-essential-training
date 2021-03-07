@@ -11,17 +11,22 @@ class App extends React.Component {
         initialSeconds: PropTypes.number.isRequired,
         onPlayAgain: PropTypes.func.isRequired,
     };
+
     state = {
         selectedNumberIds: [],
         remainingSeconds: this.props.initialSeconds,
     };
+
     gameStatus = 'PLAYING';
+
     randomNumbers = Array
         .from({ length: this.props.randomNumberCount })
         .map(() => 1 + Math.floor(10 * Math.random()));
+
     target = this.randomNumbers
         .slice(0, this.props.randomNumberCount - 2)
         .reduce((acc, curr) => acc + curr, 0);
+
     shuffledRandomNumbers = shuffle(this.randomNumbers);
 
     componentDidMount() {
@@ -40,16 +45,16 @@ class App extends React.Component {
         clearInterval(this.intervalId);
     }
 
-
-
     isNumberSelected = (numberIndex) => {
         return this.state.selectedNumberIds.indexOf(numberIndex) >= 0;
     }
+
     selectNumber = (numberIndex) => {
         this.setState((prevState) => ({
             selectedNumberIds: [...prevState.selectedNumberIds, numberIndex]
         }));
     }
+
     UNSAFE_componentWillUpdate(nextProps, nextState) {
         if (
             nextState.selectedNumberIds !== this.state.selectedNumberIds ||
@@ -61,6 +66,7 @@ class App extends React.Component {
             }
         }
     }
+
     calcGameStatus = (nextState) => {
         const sumSelected = nextState.selectedNumberIds.reduce((acc, curr) => {
             return acc + this.shuffledRandomNumbers[curr];
