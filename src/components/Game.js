@@ -9,7 +9,7 @@ class App extends React.Component {
         randomNumberCount: PropTypes.number.isRequired,
     };
     state = {
-        selectedNumbers: [],
+        selectedNumberIds: [],
     };
     randomNumbers = Array
         .from({ length: this.props.randomNumberCount })
@@ -20,28 +20,44 @@ class App extends React.Component {
     //TODO: Shuffle random numbers.
 
     isNumberSelected = (numberIndex) => {
-        return this.state.selectedNumbers.indexOf(numberIndex) >= 0;
+        return this.state.selectedNumberIds.indexOf(numberIndex) >= 0;
     }
     selectNumber = (numberIndex) => {
         this.setState((prevState) => ({
-            selectedNumbers: [...prevState.selectedNumbers, numberIndex]
+            selectedNumberIds: [...prevState.selectedNumberIds, numberIndex]
         }));
     }
+    gameStatus = () => {
+        const sumSelected = this.state.selectedNumberIds.reduce((acc, curr) => {
+            return acc + this.randomNumbers[curr];
+        }, 0);
+        if (sumSelected < this.target) {
+            return 'PLAYING';
+        }
+        if (sumSelected == this.target) {
+            return 'WON';
+        }
+        if (sumSelected > this.target) {
+            return 'LOST';
+        }
+    };
     render() {
+        const gameStatus = this.gameStatus();
         return (
             <View style={styles.container}>
-                <Text style={styles.target}>{this.target}</Text>
+                <Text style={[styles.target, styles[`STATUS_${gameStatus}`]]}>{this.target}</Text>
                 <View style={styles.numberContainer}>
                     {this.randomNumbers.map((randomNumber, i) =>
                         <RandomNumber
                             key={i}
                             id={i}
                             number={randomNumber}
-                            isDisabled={this.isNumberSelected(i)}
+                            isDisabled={this.isNumberSelected(i) || gameStatus !== 'PLAYING'}
                             onPress={this.selectNumber}
                         />
                     )}
                 </View>
+                <Text>{gameStatus}</Text>
             </View>
         );
     }
@@ -70,6 +86,18 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
 
     },
+
+    STATUS_PLAYING: {
+        backgroundColor: '#bbb'
+    },
+
+    STATUS_WON: {
+        backgroundColor: 'green'
+    },
+
+    STATUS_LOST: {
+        backgroundColor: 'red'
+    }
 });
 
 export default App;
