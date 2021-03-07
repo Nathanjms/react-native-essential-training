@@ -14,7 +14,9 @@ export default class RandomNumber extends Component {
     };
 
     handlePress = () => {
-        this.props.onPress(this.props.id);
+        if (!this.props.isDisabled) {
+            this.props.onPress(this.props.id);
+        }
     };
 
 
@@ -38,7 +40,7 @@ const styles = StyleSheet.create({
         padding: 15
     },
     disabled: {
-        opacity: 0.5,
+        opacity: 0.7,
         color: 'white',
         backgroundColor: '#7b26ad',
     },
