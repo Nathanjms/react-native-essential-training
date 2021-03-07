@@ -84,11 +84,15 @@ class App extends React.Component {
             return 'LOST';
         }
     };
+
     render() {
         const gameStatus = this.gameStatus;
         return (
             <View style={styles.container}>
-                <Text style={[styles.target, styles[`STATUS_${gameStatus}`]]}>{this.target}</Text>
+                <View style={[styles.headerContainer, styles[`STATUS_${gameStatus}`]]}>
+                    <Text style={styles.target}>Target: {this.target}</Text>
+                    <Text style={styles.timer}>Remaining: {this.state.remainingSeconds}</Text>
+                </View>
                 <View style={styles.numberContainer}>
                     {this.shuffledRandomNumbers.map((randomNumber, i) =>
                         <RandomNumber
@@ -100,10 +104,12 @@ class App extends React.Component {
                         />
                     )}
                 </View>
-                {this.gameStatus !== 'PLAYING' && (
-                    <Button title="Play Again?" onPress={this.props.onPlayAgain} />
+                {gameStatus !== 'PLAYING' && (
+                    <View>
+                        <Text style={{ color: 'white', fontSize: 35 }}>Streak: 1</Text>
+                        <Button title="Play Again?" onPress={this.props.onPlayAgain} />
+                    </View>
                 )}
-                <Text>{this.state.remainingSeconds}</Text>
             </View>
         );
     }
