@@ -7,9 +7,11 @@ import RandomNumber from './RandomNumber';
 class App extends React.Component {
     static propTypes = {
         randomNumberCount: PropTypes.number.isRequired,
+        initialSeconds: PropTypes.number.isRequired,
     };
     state = {
         selectedNumberIds: [],
+        remainingSeconds: this.props.initialSeconds,
     };
     randomNumbers = Array
         .from({ length: this.props.randomNumberCount })
@@ -18,6 +20,24 @@ class App extends React.Component {
         .slice(0, this.props.randomNumberCount - 2)
         .reduce((acc, curr) => acc + curr, 0);
     //TODO: Shuffle random numbers.
+
+    componentDidMount() {
+        this.intervalId = setInterval(() => {
+            this.setState((prevState) => {
+                return { remainingSeconds: prevState.remainingSeconds - 1 };
+            }, () => {
+                if (this.state.remainingSeconds === 0) {
+                    clearInterval(this.intervalId);
+                }
+            });
+        }, 1000);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.intervalId);
+    }
+
+
 
     isNumberSelected = (numberIndex) => {
         return this.state.selectedNumberIds.indexOf(numberIndex) >= 0;
@@ -31,6 +51,9 @@ class App extends React.Component {
         const sumSelected = this.state.selectedNumberIds.reduce((acc, curr) => {
             return acc + this.randomNumbers[curr];
         }, 0);
+        if (this.state.remainingSeconds === 0) {
+            return 'LOST';
+        }
         if (sumSelected < this.target) {
             return 'PLAYING';
         }
@@ -57,7 +80,7 @@ class App extends React.Component {
                         />
                     )}
                 </View>
-                <Text>{gameStatus}</Text>
+                <Text>{this.state.remainingSeconds}</Text>
             </View>
         );
     }
