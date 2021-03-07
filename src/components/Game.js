@@ -8,6 +8,9 @@ class App extends React.Component {
     static propTypes = {
         randomNumberCount: PropTypes.number.isRequired,
     };
+    state = {
+        selectedNumbers: [0, 4],
+    };
     randomNumbers = Array
         .from({ length: this.props.randomNumberCount })
         .map(() => 1 + Math.floor(10 * Math.random()));
@@ -15,13 +18,19 @@ class App extends React.Component {
         .slice(0, this.props.randomNumberCount - 2)
         .reduce((acc, curr) => acc + curr, 0);
     //TODO: Shuffle random numbers.
+
+    isNumberSelected = (numberIndex) => {
+        return this.state.selectedNumbers.indexOf(numberIndex) >= 0;
+    }
     render() {
         return (
             <View style={styles.container}>
                 <Text style={styles.target}>{this.target}</Text>
                 <View style={styles.numberContainer}>
                     {this.randomNumbers.map((randomNumber, i) =>
-                        <RandomNumber key={i} number={randomNumber} />
+                        <RandomNumber key={i} number={randomNumber}
+                            isSelected={this.isNumberSelected(i)}
+                        />
                     )}
                 </View>
             </View>
@@ -30,7 +39,7 @@ class App extends React.Component {
 }
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#ddd',
+        backgroundColor: '#282c34',
         flex: 1,
         paddingTop: 30,
     },
@@ -45,8 +54,8 @@ const styles = StyleSheet.create({
 
     numberContainer: {
         flex: 1,
-        marginHorizontal: 20,
-        marginTop: 170,
+        marginHorizontal: 30,
+        marginTop: 50,
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'space-around',

@@ -8,6 +8,7 @@ export default class RandomNumber extends Component {
 
     static propTypes = {
         number: PropTypes.number.isRequired,
+        isSelected: PropTypes.bool.isRequired,
     };
 
     handlePress = () => {
@@ -17,7 +18,7 @@ export default class RandomNumber extends Component {
     render() {
         return (
             <TouchableOpacity onPress={this.handlePress}>
-                <Text style={styles.number}>{this.props.number}</Text>
+                <Text style={[styles.number, this.props.isSelected ? styles.selected : '']}>{this.props.number}</Text>
             </TouchableOpacity>
         );
     }
@@ -27,9 +28,15 @@ const styles = StyleSheet.create({
     number: {
         backgroundColor: '#999',
         width: 100,
-        margin: 20,
+        margin: 30,
         textAlign: 'center',
         fontSize: 35,
         borderRadius: 20,
-    }
+        padding: 15
+    },
+    selected: {
+        opacity: 0.5,
+        color: 'white',
+        backgroundColor: '#7b26ad',
+    },
 });
