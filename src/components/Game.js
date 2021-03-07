@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import PropTypes, { number } from 'prop-types';
 import { StyleSheet, Text, View } from 'react-native';
 
 import RandomNumber from './RandomNumber';
@@ -9,7 +9,7 @@ class App extends React.Component {
         randomNumberCount: PropTypes.number.isRequired,
     };
     state = {
-        selectedNumbers: [0, 4],
+        selectedNumbers: [],
     };
     randomNumbers = Array
         .from({ length: this.props.randomNumberCount })
@@ -22,14 +22,23 @@ class App extends React.Component {
     isNumberSelected = (numberIndex) => {
         return this.state.selectedNumbers.indexOf(numberIndex) >= 0;
     }
+    selectNumber = (numberIndex) => {
+        this.setState((prevState) => ({
+            selectedNumbers: [...prevState.selectedNumbers, numberIndex]
+        }));
+    }
     render() {
         return (
             <View style={styles.container}>
                 <Text style={styles.target}>{this.target}</Text>
                 <View style={styles.numberContainer}>
                     {this.randomNumbers.map((randomNumber, i) =>
-                        <RandomNumber key={i} number={randomNumber}
-                            isSelected={this.isNumberSelected(i)}
+                        <RandomNumber
+                            key={i}
+                            id={i}
+                            number={randomNumber}
+                            isDisabled={this.isNumberSelected(i)}
+                            onPress={this.selectNumber}
                         />
                     )}
                 </View>
