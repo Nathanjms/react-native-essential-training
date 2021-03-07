@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Button } from 'react-native';
 
 import RandomNumber from './RandomNumber';
 import shuffle from 'lodash.shuffle';
@@ -9,6 +9,7 @@ class App extends React.Component {
     static propTypes = {
         randomNumberCount: PropTypes.number.isRequired,
         initialSeconds: PropTypes.number.isRequired,
+        onPlayAgain: PropTypes.func.isRequired,
     };
     state = {
         selectedNumberIds: [],
@@ -49,9 +50,6 @@ class App extends React.Component {
             selectedNumberIds: [...prevState.selectedNumberIds, numberIndex]
         }));
     }
-    gameStatus = () => {
-        const sumSelected = this.state.selectedNumberIds.reduce((acc, curr) => {
-            return acc + this.randomNumbers[curr];
     UNSAFE_componentWillUpdate(nextProps, nextState) {
         if (
             nextState.selectedNumberIds !== this.state.selectedNumberIds ||
@@ -96,6 +94,9 @@ class App extends React.Component {
                         />
                     )}
                 </View>
+                {this.gameStatus !== 'PLAYING' && (
+                    <Button title="Play Again?" onPress={this.props.onPlayAgain} />
+                )}
                 <Text>{this.state.remainingSeconds}</Text>
             </View>
         );
